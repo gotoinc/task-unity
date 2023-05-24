@@ -20,8 +20,6 @@ export class UserEntity {
   })
   username: string
 
-  @Column({
-    select: false,
-  })
+  @Column()
   password: string
 }
