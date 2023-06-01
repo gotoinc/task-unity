@@ -1,4 +1,4 @@
-export interface JwtPayload {
+export interface RefreshTokenPayload {
   username: string;
   email: string;
   uniqueId: string;

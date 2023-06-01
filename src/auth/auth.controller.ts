@@ -13,7 +13,14 @@ export class AuthController {
   }
 
   @Post('/sign-in')
-  signIn(@Body() dto: SignInDto): Promise<{ accessToken: string }> {
+  async signIn(
+    @Body() dto: SignInDto,
+  ): Promise<{ accessToken: string; refreshToken: string }> {
     return this.authService.signIn(dto);
+  }
+
+  @Post('/refresh')
+  async refresh() {
+    return this.authService.refresh();
   }
 }
