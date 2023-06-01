@@ -8,6 +8,7 @@ import { SignInDto } from './dto/sign-in.dto';
 import { RefreshTokenPayload } from './refresh-token-payload.interface';
 import crypto from 'crypto';
 import { UserSessionsRepository } from './user-sessions.repository';
+import { UserEntity } from '../users/user.entity';
 
 @Injectable()
 export class AuthService {
@@ -19,6 +20,10 @@ export class AuthService {
 
   async signUp(dto: SignUpDto) {
     return this.usersRepository.createUser(dto);
+  }
+
+  async logoutFromAllDevices(user: UserEntity) {
+    await this.userSessionsRepository.deleteAllUserSessions(user.id);
   }
 
   async signIn(dto: SignInDto): Promise<{ accessToken: string }> {

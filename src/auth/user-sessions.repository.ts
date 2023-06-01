@@ -25,4 +25,12 @@ export class UserSessionsRepository extends Repository<UserSessionEntity> {
       throw new InternalServerErrorException('Error creating session');
     }
   }
+
+  async deleteAllUserSessions(userId: number) {
+    try {
+      await this.userSessionsRepository.delete({ userId });
+    } catch (error) {
+      throw new InternalServerErrorException('Error deleting sessions');
+    }
+  }
 }
