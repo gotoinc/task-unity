@@ -1,7 +1,8 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Post, Req } from '@nestjs/common';
 import { SignUpDto } from './dto/sign-up.dto';
 import { AuthService } from './auth.service';
 import { SignInDto } from './dto/sign-in.dto';
+import { ExtractJwt } from 'passport-jwt';
 
 @Controller('auth')
 export class AuthController {
@@ -13,14 +14,13 @@ export class AuthController {
   }
 
   @Post('/sign-in')
-  async signIn(
-    @Body() dto: SignInDto,
-  ): Promise<{ accessToken: string; refreshToken: string }> {
+  async signIn(@Body() dto: SignInDto): Promise<{ accessToken: string }> {
     return this.authService.signIn(dto);
   }
 
   @Post('/refresh')
-  async refresh() {
-    return this.authService.refresh();
+  async refresh(@Req() request): Promise<{ accessToken: string }> {
+    const accessToken = ExtractJwt.fromAuthHeaderAsBearerToken()(request);
+    return this.authService.refresh(accessToken);
   }
 }

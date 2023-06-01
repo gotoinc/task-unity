@@ -6,6 +6,9 @@ import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { JwtStrategy } from './jwt.strategy';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { UserSessionEntity } from './user-session.entity';
+import { UserSessionsRepository } from './user-sessions.repository';
 
 @Module({
   imports: [
@@ -20,6 +23,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
         signOptions: { expiresIn: '1h' },
       }),
     }),
+    TypeOrmModule.forFeature([UserSessionEntity]),
   ],
   controllers: [AuthController],
   providers: [
@@ -32,6 +36,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
       },
       inject: [ConfigService],
     },
+    UserSessionsRepository,
   ],
   exports: [JwtStrategy, PassportModule],
 })

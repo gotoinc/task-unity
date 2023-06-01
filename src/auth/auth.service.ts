@@ -7,11 +7,13 @@ import { JwtPayload } from './jwt-payload.interface';
 import { SignInDto } from './dto/sign-in.dto';
 import { RefreshTokenPayload } from './refresh-token-payload.interface';
 import crypto from 'crypto';
+import { UserSessionsRepository } from './user-sessions.repository';
 
 @Injectable()
 export class AuthService {
   constructor(
     private usersRepository: UsersRepository,
+    private userSessionsRepository: UserSessionsRepository,
     private jwtService: JwtService,
   ) {}
 
@@ -19,9 +21,7 @@ export class AuthService {
     return this.usersRepository.createUser(dto);
   }
 
-  async signIn(
-    dto: SignInDto,
-  ): Promise<{ accessToken: string; refreshToken: string }> {
+  async signIn(dto: SignInDto): Promise<{ accessToken: string }> {
     const { email, password } = dto;
     const user = await this.usersRepository.findOneBy({ email });
 
@@ -42,10 +42,48 @@ export class AuthService {
         refreshPayload,
       );
 
-      return { accessToken, refreshToken };
+      await this.userSessionsRepository.createSession({
+        sessionId: uniqueId,
+        refreshToken,
+        expiresAt: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
+        createdAt: new Date(),
+        userId: user.id,
+      });
+
+      return { accessToken };
     } else {
       throw new UnauthorizedException('Invalid credentials');
     }
+  }
+
+  async refresh(accessToken: string): Promise<{ accessToken: string }> {
+    const { uniqueId, email, username }: JwtPayload = this.jwtService.decode(
+      accessToken,
+    ) as JwtPayload;
+
+    const userSession = await this.userSessionsRepository.findOneBy({
+      sessionId: uniqueId,
+    });
+
+    if (!userSession) {
+      throw new UnauthorizedException('Invalid session');
+    }
+
+    if (userSession.expiresAt < new Date()) {
+      throw new UnauthorizedException('Session expired');
+    }
+
+    const jwtPayload: JwtPayload = {
+      email,
+      username,
+      uniqueId,
+    };
+
+    const newAccessToken = await this.generateJwt(jwtPayload);
+
+    return {
+      accessToken: newAccessToken,
+    };
   }
 
   private async generateTokens(
