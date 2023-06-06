@@ -1,10 +1,10 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { UsersRepository } from '../users/users.repository';
-import { SignUpDto } from './dto/sign-up.dto';
+import { SignUpDto } from './dto/request/sign-up.dto';
 import argon2 from 'argon2';
 import { JwtService } from '@nestjs/jwt';
 import { JwtPayload } from './jwt-payload.interface';
-import { SignInDto } from './dto/sign-in.dto';
+import { SignInDto } from './dto/request/sign-in.dto';
 import { RefreshTokenPayload } from './refresh-token-payload.interface';
 import crypto from 'crypto';
 import { UserSessionsRepository } from './user-sessions.repository';

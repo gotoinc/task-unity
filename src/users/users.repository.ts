@@ -6,7 +6,7 @@ import {
   InternalServerErrorException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { SignUpDto } from '../auth/dto/sign-up.dto';
+import { SignUpDto } from '../auth/dto/request/sign-up.dto';
 import { PostgresError } from 'pg-error-enum';
 import * as argon2 from 'argon2';
 

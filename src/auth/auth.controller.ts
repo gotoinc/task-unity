@@ -1,7 +1,7 @@
 import { Body, Controller, Post, Req, UseGuards } from '@nestjs/common';
-import { SignUpDto } from './dto/sign-up.dto';
+import { SignUpDto } from './dto/request/sign-up.dto';
 import { AuthService } from './auth.service';
-import { SignInDto } from './dto/sign-in.dto';
+import { SignInDto } from './dto/request/sign-in.dto';
 import { ExtractJwt } from 'passport-jwt';
 import { GetUser } from './get-user.decorator';
 import { UserEntity } from '../users/user.entity';
