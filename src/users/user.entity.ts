@@ -1,5 +1,12 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { Exclude } from 'class-transformer';
+import { TaskEntity } from '../tasks/task.entity';
 
 @Entity()
 export class UserEntity {
@@ -19,4 +26,13 @@ export class UserEntity {
   @Column()
   @Exclude({ toPlainOnly: true })
   password: string;
+
+  @OneToMany(() => TaskEntity, (task) => task.createdBy)
+  tasks: TaskEntity[];
+
+  @OneToMany(() => TaskEntity, (task) => task.assignee)
+  assignedTasks: TaskEntity[];
+
+  @CreateDateColumn({ type: 'timestamp' })
+  registerDate: Date;
 }
