@@ -13,13 +13,17 @@ export class TaskEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => UserEntity, (user) => user.tasks, {})
+  @ManyToOne(() => UserEntity, (user) => user.tasks, {
+    eager: true,
+  })
   createdBy: UserEntity;
 
   @CreateDateColumn({ type: 'timestamp' })
   createdAt: Date;
 
-  @ManyToOne(() => UserEntity, (user) => user.assignedTasks)
+  @ManyToOne(() => UserEntity, (user) => user.assignedTasks, {
+    eager: true,
+  })
   assignee: UserEntity;
 
   @Column()
@@ -44,6 +48,6 @@ export class TaskEntity {
   @Column({ default: false })
   isCompleted: boolean;
 
-  @Column({ default: [] })
+  @Column({ type: 'text', array: true, default: [] })
   tags: string[];
 }
