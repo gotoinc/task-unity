@@ -30,12 +30,12 @@ export class TasksRepository extends Repository<TaskEntity> {
   }
 
   async getTasks(user: UserEntity): Promise<TaskEntity[]> {
-    const query = this.createQueryBuilder('task');
+    const tasks = await this.findBy({
+      createdBy: {
+        id: user.id,
+      },
+    });
 
-    query
-      .leftJoinAndSelect('task.assignee', 'assignee')
-      .where({ createdBy: user });
-
-    return query.getMany();
+    return tasks;
   }
 }
