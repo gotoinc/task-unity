@@ -2,6 +2,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { TaskEntity } from '../tasks/task.entity';
@@ -12,10 +13,12 @@ export class TaskCommentEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @ManyToOne(() => TaskEntity, (task) => task.comments)
   task: TaskEntity;
 
-  @Column()
+  @ManyToOne(() => UserEntity, (user) => user.comments, {
+    eager: true,
+  })
   createdBy: UserEntity;
 
   @CreateDateColumn({ type: 'timestamp' })
