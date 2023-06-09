@@ -15,8 +15,12 @@ import { CreateTaskCommentDto } from './dto/request/create-task-comment.dto';
 import { TaskCommentsService } from './task-comments.service';
 import { TaskCommentEntity } from './task-comment.entity';
 import { UpdateTaskCommentDto } from './dto/request/update-task-comment.dto';
+import { TaskBelongingGuard } from '../tasks/task-belonging.guard';
+import { TaskCommentBelongingGuard } from './task-comment-belonging.guard';
+import { TaskIdParamKey } from '../tasks/task-id-param-key.decorator';
 
-@UseGuards(AuthGuard())
+@TaskIdParamKey('taskId')
+@UseGuards(AuthGuard(), TaskBelongingGuard)
 @Controller('task/:taskId/comments')
 export class TaskCommentsController {
   constructor(private taskCommentsService: TaskCommentsService) {}
@@ -38,6 +42,7 @@ export class TaskCommentsController {
     return this.taskCommentsService.getTaskComments(taskId);
   }
 
+  @UseGuards(TaskCommentBelongingGuard)
   @Patch(':id')
   async updateTaskComment(
     @Body() dto: UpdateTaskCommentDto,
@@ -46,6 +51,7 @@ export class TaskCommentsController {
     return this.taskCommentsService.updateTaskComment(taskCommentId, dto);
   }
 
+  @UseGuards(TaskCommentBelongingGuard)
   @Delete(':id')
   async deleteTaskComment(@Param('id') id: number): Promise<void> {
     return this.taskCommentsService.deleteTaskComment(id);

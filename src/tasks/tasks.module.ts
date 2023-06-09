@@ -11,6 +11,6 @@ import { UsersModule } from '../users/users.module';
   imports: [TypeOrmModule.forFeature([TaskEntity]), AuthModule, UsersModule],
   controllers: [TasksController],
   providers: [TasksService, TasksRepository],
-  exports: [TasksService],
+  exports: [TasksService, TasksRepository],
 })
 export class TasksModule {}

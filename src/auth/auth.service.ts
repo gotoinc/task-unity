@@ -50,7 +50,7 @@ export class AuthService {
       await this.userSessionsRepository.createSession({
         sessionId: uniqueId,
         refreshToken,
-        expiresAt: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
+        expiresAt: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7), // 7 days
         createdAt: new Date(),
         userId: user.id,
       });
@@ -105,7 +105,8 @@ export class AuthService {
   }
 
   private async generateJwt(jwtPayload: JwtPayload): Promise<string> {
-    return this.generateToken(jwtPayload, '1h');
+    const expiryTime = process.env.NODE_ENV === 'development' ? '1h' : '7d';
+    return this.generateToken(jwtPayload, expiryTime);
   }
 
   private async generateToken(
