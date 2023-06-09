@@ -3,10 +3,12 @@ import {
   CreateDateColumn,
   Entity,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { UserEntity } from '../users/user.entity';
 import { PriorityEnum } from './priority.enum';
+import { TaskCommentEntity } from '../task-comments/task-comment.entity';
 
 @Entity()
 export class TaskEntity {
@@ -50,4 +52,7 @@ export class TaskEntity {
 
   @Column({ type: 'text', array: true, default: [] })
   tags: string[];
+
+  @OneToMany(() => TaskCommentEntity, (taskComment) => taskComment.task)
+  comments: TaskCommentEntity[];
 }

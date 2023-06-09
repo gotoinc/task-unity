@@ -7,6 +7,7 @@ import {
 } from 'typeorm';
 import { Exclude } from 'class-transformer';
 import { TaskEntity } from '../tasks/task.entity';
+import { TaskCommentEntity } from '../task-comments/task-comment.entity';
 
 @Entity()
 export class UserEntity {
@@ -35,4 +36,7 @@ export class UserEntity {
 
   @CreateDateColumn({ type: 'timestamp' })
   registerDate: Date;
+
+  @OneToMany(() => TaskCommentEntity, (comment) => comment.createdBy)
+  comments: TaskCommentEntity[];
 }

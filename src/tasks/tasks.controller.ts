@@ -17,8 +17,9 @@ import { TaskEntity } from './task.entity';
 import { UpdateTaskDto } from './dto/request/update-task.dto';
 import { UpdateTaskStatusDto } from './dto/request/update-task-status.dto';
 import { AssignTaskDto } from './dto/request/assign-task.dto';
+import { TaskBelongingGuard } from './task-belonging.guard';
 
-@UseGuards(AuthGuard())
+@UseGuards(AuthGuard(), TaskBelongingGuard)
 @Controller('tasks')
 export class TasksController {
   constructor(private tasksService: TasksService) {}
@@ -58,12 +59,15 @@ export class TasksController {
   }
 
   @Patch(':id/assign')
-  async assignTask(@Body() dto: AssignTaskDto, @Param('id') id: number) {
+  async assignTask(
+    @Body() dto: AssignTaskDto,
+    @Param('id') id: number,
+  ): Promise<TaskEntity> {
     return this.tasksService.assignTask(dto, id);
   }
 
   @Delete(':id')
-  async deleteTask(@Param('id') id: number) {
+  async deleteTask(@Param('id') id: number): Promise<void> {
     return this.tasksService.deleteTask(id);
   }
 }
