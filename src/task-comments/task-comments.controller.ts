@@ -38,7 +38,6 @@ export class TaskCommentsController {
   async getTaskComments(
     @Param('taskId') taskId: number,
   ): Promise<TaskCommentEntity[]> {
-    debugger;
     return this.taskCommentsService.getTaskComments(taskId);
   }
 
