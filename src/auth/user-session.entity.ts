@@ -1,7 +1,8 @@
-import { Column, CreateDateColumn, Entity, PrimaryColumn } from 'typeorm';
+import { Column, Entity, PrimaryColumn } from 'typeorm';
+import { CommonEntity } from '../common/entities/common.entity';
 
 @Entity()
-export class UserSessionEntity {
+export class UserSessionEntity extends CommonEntity {
   @PrimaryColumn({ type: 'uuid' })
   sessionId: string;
 
@@ -10,9 +11,6 @@ export class UserSessionEntity {
 
   @Column({ unique: true })
   refreshToken: string;
-
-  @CreateDateColumn({ type: 'timestamp' })
-  createdAt: Date;
 
   @Column({ type: 'timestamp' })
   expiresAt: Date;

@@ -1,15 +1,10 @@
-import {
-  Column,
-  CreateDateColumn,
-  Entity,
-  ManyToOne,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { TaskEntity } from '../tasks/task.entity';
 import { UserEntity } from '../users/user.entity';
+import { CommonEntity } from '../common/entities/common.entity';
 
 @Entity()
-export class TaskCommentEntity {
+export class TaskCommentEntity extends CommonEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -20,9 +15,6 @@ export class TaskCommentEntity {
     eager: true,
   })
   createdBy: UserEntity;
-
-  @CreateDateColumn({ type: 'timestamp' })
-  createdAt: Date;
 
   @Column()
   content: string;

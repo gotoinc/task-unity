@@ -1,16 +1,11 @@
-import {
-  Column,
-  CreateDateColumn,
-  Entity,
-  OneToMany,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Exclude } from 'class-transformer';
 import { TaskEntity } from '../tasks/task.entity';
 import { TaskCommentEntity } from '../task-comments/task-comment.entity';
+import { CommonEntity } from '../common/entities/common.entity';
 
 @Entity()
-export class UserEntity {
+export class UserEntity extends CommonEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -33,9 +28,6 @@ export class UserEntity {
 
   @OneToMany(() => TaskEntity, (task) => task.assignee)
   assignedTasks: TaskEntity[];
-
-  @CreateDateColumn({ type: 'timestamp' })
-  registerDate: Date;
 
   @OneToMany(() => TaskCommentEntity, (comment) => comment.createdBy)
   comments: TaskCommentEntity[];

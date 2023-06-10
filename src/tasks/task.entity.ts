@@ -1,6 +1,5 @@
 import {
   Column,
-  CreateDateColumn,
   Entity,
   ManyToOne,
   OneToMany,
@@ -9,9 +8,10 @@ import {
 import { UserEntity } from '../users/user.entity';
 import { PriorityEnum } from './priority.enum';
 import { TaskCommentEntity } from '../task-comments/task-comment.entity';
+import { CommonEntity } from '../common/entities/common.entity';
 
 @Entity()
-export class TaskEntity {
+export class TaskEntity extends CommonEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -19,9 +19,6 @@ export class TaskEntity {
     eager: true,
   })
   createdBy: UserEntity;
-
-  @CreateDateColumn({ type: 'timestamp' })
-  createdAt: Date;
 
   @ManyToOne(() => UserEntity, (user) => user.assignedTasks, {
     eager: true,
