@@ -4,6 +4,9 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { CreateTaskDto } from './dto/request/create-task.dto';
 import { UserEntity } from '../users/user.entity';
 import { Injectable } from '@nestjs/common';
+import { GetTasksDto } from './dto/request/get-tasks.dto';
+import { IPaginationOptions, paginate } from 'nestjs-typeorm-paginate';
+import { GetTasksResponseDto } from './dto/response/get-tasks-response.dto';
 
 @Injectable()
 export class TasksRepository extends Repository<TaskEntity> {
@@ -29,13 +32,16 @@ export class TasksRepository extends Repository<TaskEntity> {
     return task;
   }
 
-  async getTasks(user: UserEntity): Promise<TaskEntity[]> {
-    const tasks = await this.findBy({
-      createdBy: {
-        id: user.id,
-      },
-    });
+  async getTasks(
+    user: UserEntity,
+    dto: GetTasksDto,
+    options: IPaginationOptions,
+  ): Promise<GetTasksResponseDto> {
+    const queryBuilder = this.createQueryBuilder('task');
 
-    return tasks;
+    queryBuilder.where('task.createdBy.id = :userId', { userId: user.id });
+    queryBuilder.orderBy(`task.${dto.sort}`, dto.order);
+
+    return paginate(queryBuilder, options);
   }
 }

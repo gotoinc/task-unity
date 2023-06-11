@@ -7,6 +7,9 @@ import { UpdateTaskDto } from './dto/request/update-task.dto';
 import { UpdateTaskStatusDto } from './dto/request/update-task-status.dto';
 import { AssignTaskDto } from './dto/request/assign-task.dto';
 import { UsersService } from '../users/users.service';
+import { IPaginationOptions } from 'nestjs-typeorm-paginate';
+import { GetTasksDto } from './dto/request/get-tasks.dto';
+import { GetTasksResponseDto } from './dto/response/get-tasks-response.dto';
 
 @Injectable()
 export class TasksService {
@@ -29,8 +32,12 @@ export class TasksService {
     return task;
   }
 
-  async getTasks(user: UserEntity): Promise<TaskEntity[]> {
-    return this.tasksRepository.getTasks(user);
+  async getTasks(
+    user: UserEntity,
+    dto: GetTasksDto,
+    options: IPaginationOptions,
+  ): Promise<GetTasksResponseDto> {
+    return this.tasksRepository.getTasks(user, dto, options);
   }
 
   async updateTask(dto: UpdateTaskDto, id: number): Promise<TaskEntity> {

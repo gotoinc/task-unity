@@ -6,6 +6,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
@@ -18,6 +19,10 @@ import { UpdateTaskCommentDto } from './dto/request/update-task-comment.dto';
 import { TaskBelongingGuard } from '../tasks/task-belonging.guard';
 import { TaskCommentBelongingGuard } from './task-comment-belonging.guard';
 import { TaskIdParamKey } from '../tasks/task-id-param-key.decorator';
+import { GetTaskCommentsResponseDto } from './dto/response/get-task-comments-response.dto';
+import { PaginationOptions } from '../common/decorators/pagination-options.decorator';
+import { IPaginationOptions } from 'nestjs-typeorm-paginate';
+import { GetTaskCommentsDto } from './dto/request/get-task-comments.dto';
 
 @TaskIdParamKey('taskId')
 @UseGuards(AuthGuard(), TaskBelongingGuard)
@@ -37,8 +42,11 @@ export class TaskCommentsController {
   @Get()
   async getTaskComments(
     @Param('taskId') taskId: number,
-  ): Promise<TaskCommentEntity[]> {
-    return this.taskCommentsService.getTaskComments(taskId);
+    @PaginationOptions() options: IPaginationOptions,
+    @Query() dto: GetTaskCommentsDto,
+  ): Promise<GetTaskCommentsResponseDto> {
+    debugger;
+    return this.taskCommentsService.getTaskComments(taskId, dto, options);
   }
 
   @UseGuards(TaskCommentBelongingGuard)

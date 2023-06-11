@@ -5,6 +5,9 @@ import { TasksService } from '../tasks/tasks.service';
 import { CreateTaskCommentDto } from './dto/request/create-task-comment.dto';
 import { UserEntity } from '../users/user.entity';
 import { UpdateTaskCommentDto } from './dto/request/update-task-comment.dto';
+import { GetTaskCommentsDto } from './dto/request/get-task-comments.dto';
+import { IPaginationOptions } from 'nestjs-typeorm-paginate';
+import { GetTaskCommentsResponseDto } from './dto/response/get-task-comments-response.dto';
 
 @Injectable()
 export class TaskCommentsService {
@@ -45,16 +48,14 @@ export class TaskCommentsService {
     return taskComment;
   }
 
-  async getTaskComments(taskId: number): Promise<TaskCommentEntity[]> {
+  async getTaskComments(
+    taskId: number,
+    dto: GetTaskCommentsDto,
+    options: IPaginationOptions,
+  ): Promise<GetTaskCommentsResponseDto> {
     const task = await this.tasksService.getTaskById(taskId);
 
-    const taskComments = await this.taskCommentsRepository.findBy({
-      task: {
-        id: task.id,
-      },
-    });
-
-    return taskComments;
+    return this.taskCommentsRepository.getTaskComments(task, dto, options);
   }
 
   async updateTaskComment(
