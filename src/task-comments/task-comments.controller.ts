@@ -23,7 +23,10 @@ import { GetTaskCommentsResponseDto } from './dto/response/get-task-comments-res
 import { PaginationOptions } from '../common/decorators/pagination-options.decorator';
 import { IPaginationOptions } from 'nestjs-typeorm-paginate';
 import { GetTaskCommentsDto } from './dto/request/get-task-comments.dto';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('task-comments')
+@ApiBearerAuth()
 @TaskIdParamKey('taskId')
 @UseGuards(AuthGuard(), TaskBelongingGuard)
 @Controller('task/:taskId/comments')

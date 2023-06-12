@@ -6,7 +6,9 @@ import { ExtractJwt } from 'passport-jwt';
 import { GetUser } from './get-user.decorator';
 import { UserEntity } from '../users/user.entity';
 import { AuthGuard } from '@nestjs/passport';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('auth')
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
@@ -21,12 +23,15 @@ export class AuthController {
     return this.authService.signIn(dto);
   }
 
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard())
   @Post('/refresh')
   async refresh(@Req() request): Promise<{ accessToken: string }> {
     const accessToken = ExtractJwt.fromAuthHeaderAsBearerToken()(request);
     return this.authService.refresh(accessToken);
   }
 
+  @ApiBearerAuth()
   @UseGuards(AuthGuard())
   @Post('/logout-all-devices')
   async logoutFromAllDevices(@GetUser() user: UserEntity) {
