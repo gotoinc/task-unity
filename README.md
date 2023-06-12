@@ -12,7 +12,7 @@
 $ yarn install
 ```
 
-## Running the app
+## Running the app in dev mode
 
 ```bash
 # development
@@ -23,6 +23,16 @@ $ yarn run start:dev
 
 # production mode
 $ yarn run start:prod
+```
+
+## Running the app in container
+
+```bash
+# start server
+$ make start
+
+# stop server
+$ make stop
 ```
 
 ## Contributing

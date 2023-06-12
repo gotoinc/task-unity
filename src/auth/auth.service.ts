@@ -105,13 +105,13 @@ export class AuthService {
   }
 
   private async generateJwt(jwtPayload: JwtPayload): Promise<string> {
-    const expiryTime = process.env.NODE_ENV === 'development' ? '1h' : '7d';
+    const expiryTime = +process.env.JWT_EXPIRATION_TIME;
     return this.generateToken(jwtPayload, expiryTime);
   }
 
   private async generateToken(
     tokenPayload: JwtPayload | RefreshTokenPayload,
-    expiresIn = '1h',
+    expiresIn: string | number,
   ): Promise<string> {
     const token = await this.jwtService.signAsync(tokenPayload, {
       expiresIn,
