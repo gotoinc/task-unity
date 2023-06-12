@@ -18,10 +18,17 @@ export class TaskBelongingGuard implements CanActivate {
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
 
-    const taskIdParamKey =
-      this.reflector.get<string>(taskIdMetadataKey, context.getClass()) || 'id';
+    const taskIdParamKey = this.reflector.get<string>(
+      taskIdMetadataKey,
+      context.getClass(),
+    );
 
     const taskId = request.params[taskIdParamKey];
+
+    if (!taskId) {
+      return true;
+    }
+
     const { id: userId } = request.user;
 
     const task = await this.tasksRepository.findOneBy({

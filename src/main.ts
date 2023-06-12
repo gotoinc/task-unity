@@ -3,6 +3,7 @@ import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { TransformInterceptor } from './transform.interceptor';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { ConfigService } from '@nestjs/config';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -23,7 +24,9 @@ async function bootstrap() {
     },
   });
 
-  await app.listen(3000);
+  const configService = app.get(ConfigService);
+
+  await app.listen(configService.get('PORT'));
 }
 
 bootstrap();

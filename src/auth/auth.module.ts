@@ -20,7 +20,9 @@ import { UserSessionsRepository } from './user-sessions.repository';
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => ({
         secret: configService.get<string>('JWT_SECRET_KEY'),
-        signOptions: { expiresIn: '1h' },
+        signOptions: {
+          expiresIn: configService.get<string>('JWT_EXPIRATION_TIME'),
+        },
       }),
     }),
     TypeOrmModule.forFeature([UserSessionEntity]),
