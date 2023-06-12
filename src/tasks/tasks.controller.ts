@@ -23,7 +23,10 @@ import { GetTasksResponseDto } from './dto/response/get-tasks-response.dto';
 import { PaginationOptions } from '../common/decorators/pagination-options.decorator';
 import { IPaginationOptions } from 'nestjs-typeorm-paginate';
 import { GetTasksDto } from './dto/request/get-tasks.dto';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('tasks')
+@ApiBearerAuth()
 @UseGuards(AuthGuard(), TaskBelongingGuard)
 @Controller('tasks')
 export class TasksController {
