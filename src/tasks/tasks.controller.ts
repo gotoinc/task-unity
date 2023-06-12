@@ -24,9 +24,11 @@ import { PaginationOptions } from '../common/decorators/pagination-options.decor
 import { IPaginationOptions } from 'nestjs-typeorm-paginate';
 import { GetTasksDto } from './dto/request/get-tasks.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { TaskIdParamKey } from './task-id-param-key.decorator';
 
 @ApiTags('tasks')
 @ApiBearerAuth()
+@TaskIdParamKey('id')
 @UseGuards(AuthGuard(), TaskBelongingGuard)
 @Controller('tasks')
 export class TasksController {
